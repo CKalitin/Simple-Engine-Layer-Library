@@ -12,5 +12,5 @@ int main(int argc, char *argv[]) {
 }
 
 void Update() {
-    std::cout << "Hello from Update2!!!" << std::endl;
+    //std::cout << "Hello from Update2!!!" << std::endl;
 }

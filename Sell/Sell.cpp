@@ -12,48 +12,32 @@ Sell::Sell(const char* p_title, int p_w, int p_h, void(*p_UpdateCallback)()) : t
 void Sell::Update() {
     RenderWindow window(title, width, height); // Create Window
     SDL_Event event; // SDL Event Queue
-    while (run) {
-        const float timeStep = 0.01f;
-        float accumulator = 0.0f;
-        float currentTime = utils::hireTimeInSeconds();
 
-        while (run) { // Game Loop
-            //std::cout << "Game Loop" << std::endl;
-            UpdateCallback();
-            //std::cout << "Loop Game" << std::endl;
-
-            int startTick = SDL_GetTicks();
-
-            float newTime = utils::hireTimeInSeconds();
-            float frameTime = newTime - currentTime;
-            currentTime = newTime;
-
-            while (accumulator >= timeStep) {
-                while (SDL_PollEvent(&event)) { // Loop through SDL Events
-                    if (event.type == SDL_QUIT) { // If quit button was pressed stop running
-                        run = false;
-                    }
-                }
-
-                accumulator -= timeStep;
+    while (run) { // Game Loop
+        Timer* timer = new Timer();
+    
+        UpdateCallback();
+    
+        while (SDL_PollEvent(&event)) { // Loop through SDL Events
+            if (event.type == SDL_QUIT) { // If quit button was pressed stop running
+                run = false;
             }
-
-            const float alpha = accumulator / timeStep;
-
-            window.Clear(); // Clear Window
-
-            for (Entity& entity : entities) { // Loop through entities
-                window.Render(entity); // Draw current entity
-            }
-
-            window.Display(); // Display all rendered textures
-
-            int frameTicks = SDL_GetTicks();
-
-            if (frameTicks < 1000 / window.getRefreshRate())
-                SDL_Delay(1000 / window.getRefreshRate() - frameTicks);
         }
-        window.CleanUp();
-        SDL_Quit();
+    
+        window.Clear(); // Clear Window
+        for (Entity& entity : entities) { // Loop through entities
+            window.Render(entity); // Draw current entity
+        }
+        window.Display(); // Display all rendered textures
+    
+        utils::time::deltaTime = timer->EndTimer(timer);
+        fps = (int)(1 / utils::time::deltaTime);
+
+        if (utils::time::deltaTime < 1 / (float)targetFPS) {
+            SDL_Delay((int)(1 / (float)targetFPS - utils::time::deltaTime) * 1000);
+        }
     }
+    window.CleanUp();
+    SDL_Quit();
+    
 }
