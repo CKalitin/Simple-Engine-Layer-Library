@@ -10,6 +10,8 @@
 class RenderWindow {
 public:
 	RenderWindow(const char* p_title, int p_w, int p_h); // Constructor
+	RenderWindow* GetRenderWindow(); // Returns this
+
 	SDL_Texture* LoadTexture(const char* p_filePath);
 
 	int getRefreshRate();

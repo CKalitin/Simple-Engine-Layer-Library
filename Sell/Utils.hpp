@@ -14,9 +14,8 @@ namespace utils {
 class Timer {
 public:
 	Timer() { startTime = utils::time::timeInSeconds(); };
-	float EndTimer(Timer* p_timer) {
+	float GetTime() {
 		return utils::time::timeInSeconds() - startTime;
-		delete p_timer;
 	};
 private:
 	float startTime;

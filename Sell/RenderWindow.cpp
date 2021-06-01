@@ -8,6 +8,10 @@ RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h) : window(NULL)
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); // Setup renderer, param 3 is to use graphics card for better rendering times
 }
 
+RenderWindow* RenderWindow::GetRenderWindow() {
+	return this;
+}
+
 SDL_Texture* RenderWindow::LoadTexture(const char* p_filePath) {
 	SDL_Texture* texture = NULL;
 	texture = IMG_LoadTexture(renderer, p_filePath); // Set texture var to file at p_filePath

@@ -9,12 +9,14 @@
 
 class Entity {
 public:
+	Entity(); // Default Constructor (I don't understand this so I think it is absolute nonsense and is a horrible feature)
 	Entity(Vector2 p_pos, SDL_Texture* p_tex); // Entity Constructor
+
+	void Move(Vector2 p_pos); // Move Entity to pos
+
 	Vector2& getPos() { return pos; };
 	SDL_Texture* getTex() { return tex;  };
 	SDL_Rect getCurrentFrame() { return currentFrame; };
-
-	static std::vector<Entity> entities;
 private:
 	Vector2 pos;
 	SDL_Rect currentFrame;
