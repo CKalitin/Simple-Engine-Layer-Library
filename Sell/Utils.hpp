@@ -4,19 +4,14 @@
 
 namespace utils {
 	namespace time {
-		inline float timeInSeconds() {
-			return SDL_GetTicks() / 1000.0f;
-		}
-		static float deltaTime = 0;
+		inline float timeInSeconds() { return SDL_GetTicks() / 1000.0f; } // Return current time in seconds since SDL Init
 	}
 }
 
 class Timer {
 public:
-	Timer() { startTime = utils::time::timeInSeconds(); };
-	float GetTime() {
-		return utils::time::timeInSeconds() - startTime;
-	};
+	Timer() { startTime = utils::time::timeInSeconds(); }; // Construct timer
+	float GetTime() { return utils::time::timeInSeconds() - startTime; }; // Get current time of Timer
 private:
-	float startTime;
+	float startTime; // Start time of Timer
 };

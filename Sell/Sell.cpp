@@ -6,61 +6,55 @@ void Sell::Init(const char* p_title, int p_w, int p_h, void(*p_StartCallback)(),
     if (!IMG_Init(IMG_INIT_PNG)) // Init image loading script in SDL
         std::cout << "IMG_Init has failed. Error: " << SDL_GetError() << std::endl;
 
-    title = p_title;
-    width = p_w;
-    height = p_h;
+    StartCallback = p_StartCallback; // Set Start Callback Variable
+    UpdateCallback = p_UpdateCallback; // Set Update Callback Variable
 
-    UpdateCallback = p_UpdateCallback;
-    StartCallback = p_StartCallback;
+    RenderWindow newWindow(p_title, p_w, p_h); // Init Window
+    window = newWindow.GetRenderWindow(); // Get Window pointer
 
-    RenderWindow newWindow(p_title, p_w, p_h);
-    window = newWindow.GetRenderWindow();
+    inputManager = InputManager(); // Create Input Manager
 
-    Loop();
+    Loop(); // Start Loop
 }
 
 void Sell::Loop() {
-    //RenderWindow window(title, width, height); // Create Window
-    SDL_Event event; // SDL Event Queue
-
-    StartCallback();
+    StartCallback(); // Run Start Callback
 
     while (run) { // Game Loop
-        Timer* timer = new Timer();
+        Timer* timer = new Timer(); // Init Timer for time taken per frame
     
-        UpdateCallback();
-    
-        while (SDL_PollEvent(&event)) { // Loop through SDL Events
-            if (event.type == SDL_QUIT) { // If quit button was pressed stop running
-                run = false;
-            }
+        inputManager.Update();
+
+        UpdateCallback(); // Run Update Callback
+
+        if (inputManager.onQuit()) { // If X in top right of window is pressed
+            run = false;
         }
-    
+
         (*window).Clear(); // Clear Window
         for (Entity& entity : entities) { // Loop through entities
             (*window).Render(entity); // Draw current entity
         }
         (*window).Display(); // Display all rendered textures
     
-        float deltaTime = timer->GetTime();
-        if (deltaTime < 1 / (float)targetFPS) {
-            SDL_Delay((int)((1 / (float)targetFPS - deltaTime) * 1000));
+        deltaTime = timer->GetTime(); // Set deltaTime
+        if (deltaTime < 1 / (float)targetFPS) { // If the frame was finished before fps time specified
+            SDL_Delay((int)((1 / (float)targetFPS - deltaTime) * 1000)); // Delay until frame time = specified frame time from SetFPS
         }
 
-        utils::time::deltaTime = timer->GetTime();
-        fps = (int)round(1 / utils::time::deltaTime);
-        delete timer;
+        deltaTime = timer->GetTime(); // Get actual deltaTime after delay
+        fps = (int)round(1 / deltaTime); // Set FPS variable
+        delete timer; // Delete Timer
     }
-    (*window).CleanUp();
-    SDL_Quit();
+    (*window).CleanUp(); // Close Window
+    SDL_Quit(); // Quit SDL
     
 }
 
-Entity* Sell::InstantiateEntity(Vector2 p_pos, const char* texturePath) {
-    Entity newEntity = Entity(p_pos, window->LoadTexture(texturePath));
-    entities.push_back(newEntity);
-    newEntity.getPos().print();
-    return &entities[entities.capacity() - 1];
+Entity* Sell::InstantiateEntity(Vector2 p_pos, Vector2 p_scale, const char* p_texturePath) {
+    Entity newEntity = Entity(p_pos, p_scale, window->LoadTexture(p_texturePath)); // Create new Entity
+    entities.push_back(newEntity); // Add new Entity to entities list
+    return &entities[entities.capacity() - 1]; // return memory position of new Entity in entities list
 }
 
 void Sell::DeleteEntity(Entity* p_entity) {

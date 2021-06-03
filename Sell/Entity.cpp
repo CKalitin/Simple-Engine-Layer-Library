@@ -1,9 +1,10 @@
 #include "Entity.hpp"
 
-Entity::Entity(Vector2 p_pos, SDL_Texture* p_tex) : pos(p_pos), tex(p_tex) {
+Entity::Entity(Vector2 p_pos, Vector2 p_scale, SDL_Texture* p_tex) : pos(p_pos), scale(p_scale), tex(p_tex) {
 	int w, h;
-	SDL_QueryTexture(p_tex, NULL, NULL, &w, &h);
+	SDL_QueryTexture(p_tex, NULL, NULL, &w, &h); // Get pixel dimensions of texture
 
+	// Set variables of currentFrame
 	currentFrame.x = 0;
 	currentFrame.y = 0;
 	currentFrame.w = w;
