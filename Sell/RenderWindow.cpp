@@ -1,7 +1,7 @@
 #include "RenderWindow.hpp"
 
-RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h) : window(NULL), renderer(NULL) {
-	window = SDL_CreateWindow(p_title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, p_w, p_h, SDL_WINDOW_SHOWN); // Create SDL Window
+RenderWindow::RenderWindow(const char* _title, int _w, int _h) : window(NULL), renderer(NULL) {
+	window = SDL_CreateWindow(_title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _w, _h, SDL_WINDOW_SHOWN); // Create SDL Window
 	if (window == NULL) { // Check if window failed to init
 		std::cout << "Window failed to init. Error" << SDL_GetError() << std::endl; // Print error
 	}
@@ -38,22 +38,21 @@ void RenderWindow::Clear() {
 	SDL_RenderClear(renderer); // Clear Window
 }
 
-void RenderWindow::Render(Entity& p_entity) {
+void RenderWindow::Render(Entity& _entity, Vector2 _pos, float _scale) {
 	SDL_Rect src; // Source: Create rect for texture
-	src.x = p_entity.getCurrentFrame().x;
-	src.y = p_entity.getCurrentFrame().y;
-	src.w = p_entity.getCurrentFrame().w;
-	src.h = p_entity.getCurrentFrame().h;
+	src.x = _entity.getCurrentFrame().x;
+	src.y = _entity.getCurrentFrame().y;
+	src.w = _entity.getCurrentFrame().w;
+	src.h = _entity.getCurrentFrame().h;
 
 	SDL_Rect dst; // Destination: Create rect for texture
-	// Set texture position to entity position
-	dst.x = (int)p_entity.getPos().x;
-	dst.y = (int)p_entity.getPos().y;
-	// Set texture pixels and scale to entity pixels and scale
-	dst.w = p_entity.getCurrentFrame().w * (int)p_entity.getScale().x;
-	dst.h = p_entity.getCurrentFrame().h * (int)p_entity.getScale().y;
+	// Set texture position to entity position and adjust so it is centered, not off to the bottom right
+	dst.x = (int)_pos.x - ((_entity.getCurrentFrame().w / 2) * _entity.getScale().x / (1 * _scale));
+	dst.y = (int)_pos.y - ((_entity.getCurrentFrame().h / 2) * _entity.getScale().y / (1 * _scale));
+	dst.w = (int)(_entity.getCurrentFrame().w * _entity.getScale().x / (1 * _scale));
+	dst.h = (int)(_entity.getCurrentFrame().h * _entity.getScale().y / (1 * _scale));
 
-	SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst); // Render texture to screen
+	SDL_RenderCopy(renderer, _entity.getTex(), &src, &dst); // Render texture to screen
 }
 
 void RenderWindow::Display() {

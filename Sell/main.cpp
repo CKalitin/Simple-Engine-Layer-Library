@@ -19,12 +19,15 @@ int main(int argc, char *argv[]) {
 void Start() {
     inputManager = sell.GetInputManager(); // Get inputManager instance
 
-    station = sell.InstantiateEntity(Vector2(200, 200), Vector2(1,1), "gfx/img.png"); // Instantiate entity for station
+    station = sell.InstantiateEntity(Vector2(0, 0), Vector2(1,1), "gfx/img.png"); // Instantiate entity for station
+
+    sell.SetCamSize(0.25);
 }
 
 void Update() {
     station->Move(Vector2(station->getPos().x + (3 * sell.GetDeltaTime()), station->getPos().y + (3 * sell.GetDeltaTime())));
-    if (inputManager->isMouseButtonDown(LEFT_Mouse_Button)) {
-        std::cout << "Left Mouse Button Pressed" << std::endl;
-    }
+    //sell.SetCamPos(Vector2(sell.GetCamPos().x + (3 * sell.GetDeltaTime()), sell.GetCamPos().y + (3 * sell.GetDeltaTime())));
+    //sell.GetCamPos().print();
+    //station->getPos().print();
+    //std::cout << "-" << std::endl;
 }

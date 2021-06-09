@@ -1,15 +1,17 @@
 #include "Sell.hpp"
 
-void Sell::Init(const char* p_title, int p_w, int p_h, void(*p_StartCallback)(), void(*p_UpdateCallback)()) {
+void Sell::Init(const char* _title, int _w, int _h, void(*_StartCallback)(), void(*_UpdateCallback)()) {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) // Init SDL
         std::cout << "SDL could not initialize. SDL Error:" << SDL_GetError << std::endl;
     if (!IMG_Init(IMG_INIT_PNG)) // Init image loading script in SDL
         std::cout << "IMG_Init has failed. Error: " << SDL_GetError() << std::endl;
 
-    StartCallback = p_StartCallback; // Set Start Callback Variable
-    UpdateCallback = p_UpdateCallback; // Set Update Callback Variable
+    StartCallback = _StartCallback; // Set Start Callback Variable
+    UpdateCallback = _UpdateCallback; // Set Update Callback Variable
 
-    RenderWindow newWindow(p_title, p_w, p_h); // Init Window
+    windowDimensions = Vector2((float)_w, (float)_h);
+
+    RenderWindow newWindow(_title, _w, _h); // Init Window
     window = newWindow.GetRenderWindow(); // Get Window pointer
 
     inputManager = InputManager(); // Create Input Manager
@@ -30,10 +32,11 @@ void Sell::Loop() {
         if (inputManager.onQuit()) { // If X in top right of window is pressed
             run = false;
         }
-
+        //(-camPos.x + (windowDimensions.x / 2)) / (1 / camSize), (-camPos.y + (windowDimensions.y / 2)) / (1 / camSize)
         (*window).Clear(); // Clear Window
         for (Entity& entity : entities) { // Loop through entities
-            (*window).Render(entity); // Draw current entity
+            Vector2 entityPos = Vector2(entity.getPos().x * (1 / camSize) + (windowDimensions.x / 2) + camPos.x, entity.getPos().y * (1 / camSize) + (windowDimensions.y / 2) + camPos.x); // Get position of entity and adjust
+            (*window).Render(entity, entityPos, camSize); // Draw current entity
         }
         (*window).Display(); // Display all rendered textures
     
@@ -51,13 +54,13 @@ void Sell::Loop() {
     
 }
 
-Entity* Sell::InstantiateEntity(Vector2 p_pos, Vector2 p_scale, const char* p_texturePath) {
-    Entity newEntity = Entity(p_pos, p_scale, window->LoadTexture(p_texturePath)); // Create new Entity
+Entity* Sell::InstantiateEntity(Vector2 _pos, Vector2 _scale, const char* _texturePath) {
+    Entity newEntity = Entity(_pos, _scale, window->LoadTexture(_texturePath)); // Create new Entity
     entities.push_back(newEntity); // Add new Entity to entities list
     return &entities[entities.capacity() - 1]; // return memory position of new Entity in entities list
 }
 
-void Sell::DeleteEntity(Entity* p_entity) {
+void Sell::DeleteEntity(Entity* _entity) {
     //entities.erase(std::remove(entities.begin(), entities.end(), p_entity), entities.end());
-    delete p_entity;
+    delete _entity;
 }
