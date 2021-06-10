@@ -3,12 +3,16 @@
 #include "Sell.hpp"
 
 void Start(); // Start Callback Declaration
-void Update(); // Start Callback Declaration
+void Update(); // Update Callback Declaration
 
 Sell sell; // Sell instance
 InputManager* inputManager; // InputManager instance
+UIManager* uiManager; // UIManager instance
+
+SDL_Texture* stationTexture;
 
 Entity* station; // station entity
+Element* uiElement; // UI Element
 
 int main(int argc, char *argv[]) {
     sell.Init("SELL", 1280, 720, &Start, &Update); // Init Sell Engine
@@ -18,10 +22,12 @@ int main(int argc, char *argv[]) {
 
 void Start() {
     inputManager = sell.GetInputManager(); // Get inputManager instance
+    uiManager = sell.GetUIManager(); // Get UIManager instance
 
-    station = sell.InstantiateEntity(Vector2(0, 0), Vector2(1,1), "gfx/img.png"); // Instantiate entity for station
+    stationTexture = sell.LoadTexture("gfx/img.png");
 
-    sell.SetCamSize(0.25);
+    station = sell.InstantiateEntity(Vector2(0, 0), Vector2(1,1), stationTexture); // Instantiate entity for station
+    uiElement = uiManager->InstantiateElement(Vector2(0.88889f, 0.5f), Vector2(1, 1), stationTexture);
 }
 
 void Update() {

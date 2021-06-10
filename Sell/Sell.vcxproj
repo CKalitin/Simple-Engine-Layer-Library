@@ -150,6 +150,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="Sell.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.hpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Math.hpp" />
     <ClInclude Include="RenderWindow.hpp" />
     <ClInclude Include="Sell.hpp" />
+    <ClInclude Include="UI.hpp" />
     <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

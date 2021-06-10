@@ -38,21 +38,38 @@ void RenderWindow::Clear() {
 	SDL_RenderClear(renderer); // Clear Window
 }
 
-void RenderWindow::Render(Entity& _entity, Vector2 _pos, float _scale) {
-	SDL_Rect src; // Source: Create rect for texture
+void RenderWindow::RenderEntity(Entity& _entity, Vector2 _pos, float _scale) {
+	SDL_Rect src; // Source, Create rect for texture
 	src.x = _entity.getCurrentFrame().x;
 	src.y = _entity.getCurrentFrame().y;
 	src.w = _entity.getCurrentFrame().w;
 	src.h = _entity.getCurrentFrame().h;
 
-	SDL_Rect dst; // Destination: Create rect for texture
+	SDL_Rect dst; // Destination, Create rect for texture
 	// Set texture position to entity position and adjust so it is centered, not off to the bottom right
-	dst.x = (int)_pos.x - ((_entity.getCurrentFrame().w / 2) * _entity.getScale().x / (1 * _scale));
-	dst.y = (int)_pos.y - ((_entity.getCurrentFrame().h / 2) * _entity.getScale().y / (1 * _scale));
+	dst.x = (int)_pos.x - (int)((_entity.getCurrentFrame().w / 2) * _entity.getScale().x / (1 * _scale));
+	dst.y = (int)_pos.y - (int)((_entity.getCurrentFrame().h / 2) * _entity.getScale().y / (1 * _scale));
 	dst.w = (int)(_entity.getCurrentFrame().w * _entity.getScale().x / (1 * _scale));
 	dst.h = (int)(_entity.getCurrentFrame().h * _entity.getScale().y / (1 * _scale));
 
 	SDL_RenderCopy(renderer, _entity.getTex(), &src, &dst); // Render texture to screen
+}
+
+void RenderWindow::Render(SDL_Texture* _tex, SDL_Rect _rect, Vector2 _pos, Vector2 _size) {
+	SDL_Rect src; // Source, Create rect for texture
+	src.x = _rect.x;
+	src.y = _rect.y;
+	src.w = _rect.w;
+	src.h = _rect.h;
+
+	SDL_Rect dst; // Destination, Create rect for texture
+	// Set pos and adjust so it is centered, not off to the bottom right
+	dst.x = (int)_pos.x - (int)(_size.x / 2);
+	dst.y = (int)_pos.y - (int)(_size.y / 2);
+	dst.w = (int)_size.x;
+	dst.h = (int)_size.y;
+
+	SDL_RenderCopy(renderer, _tex, &src, &dst); // Render texture to screen
 }
 
 void RenderWindow::Display() {

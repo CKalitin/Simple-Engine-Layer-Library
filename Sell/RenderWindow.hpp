@@ -18,7 +18,8 @@ public:
 
 	void CleanUp(); // Delete dynamic variables
 	void Clear(); // Clear screen
-	void Render(Entity& _entity, Vector2 _posOffset, float _scale); // Render entity to screen
+	void RenderEntity(Entity& _entity, Vector2 _posOffset, float _scale); // Render entity to screen
+	void Render(SDL_Texture* _tex, SDL_Rect _rect, Vector2 _pos, Vector2 _size); // Render texture to screen
 	void Display(); // Display rendered textures to window
 private:
 	SDL_Window* window; // Pointer to window var in SDL

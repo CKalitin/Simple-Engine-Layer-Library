@@ -10,9 +10,9 @@
 class Entity {
 public:
 	Entity(); // Default Constructor (I don't understand this so I think it is absolute nonsense and is a horrible feature)
-	Entity(Vector2 p_pos, Vector2 p_scale, SDL_Texture* p_tex); // Entity Constructor
+	Entity(Vector2 _pos, Vector2 _scale, SDL_Texture* _tex); // Entity Constructor
 
-	void Move(Vector2 p_pos); // Move Entity to pos
+	void Move(Vector2 _pos); // Move Entity to pos
 
 	Vector2& getPos() { return pos; };
 	Vector2& getScale() { return scale; };

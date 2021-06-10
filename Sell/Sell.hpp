@@ -8,6 +8,7 @@
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
 #include "InputManager.hpp"
+#include "UI.hpp"
 #include "utils.hpp"
 
 class Sell {
@@ -17,13 +18,16 @@ public:
 	void Loop(); // Loop which will run every frame
 
 	InputManager* GetInputManager() { return &inputManager; }; // Return Input Manager
+	UIManager* GetUIManager() { return &uiManager; }; // Return UI class
+
+	SDL_Texture* LoadTexture(const char* _filePath); // Load texture at specified file path by using renderWindow
+
+	Entity* InstantiateEntity(Vector2 _pos, Vector2 _scale, SDL_Texture* _tex); // Create new entity meathod
+	void DeleteEntity(Entity* _entity); // Delete entity meathod
 
 	int GetFPS() { return fps; }; // GetFPS (Used by user)
 	void SetTargetFPS(int _targetFPS) { targetFPS = _targetFPS; }; // Set Target FPS (Used by user)
 	float GetDeltaTime() { return deltaTime; }; // Get deltaTime (Used by user)
-
-	Entity* InstantiateEntity(Vector2 _pos, Vector2 _scale, const char* _texturePath); // Create new entity meathod
-	void DeleteEntity(Entity* _entity); // Delete entity meathod
 
 	void SetCamPos(Vector2 _pos) { camPos = _pos; }; // Set Cam Pos
 	Vector2 GetCamPos() { return camPos; }; // Get Cam Pos
@@ -34,8 +38,9 @@ private:
 	int targetFPS = 30;
 	float deltaTime;
 
-	RenderWindow* window;
+	RenderWindow* renderWindow;
 	InputManager inputManager;
+	UIManager uiManager;
 
 	void(*UpdateCallback)();
 	void(*StartCallback)();

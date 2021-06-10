@@ -12,9 +12,10 @@ void Sell::Init(const char* _title, int _w, int _h, void(*_StartCallback)(), voi
     windowDimensions = Vector2((float)_w, (float)_h);
 
     RenderWindow newWindow(_title, _w, _h); // Init Window
-    window = newWindow.GetRenderWindow(); // Get Window pointer
+    renderWindow = newWindow.GetRenderWindow(); // Get Window pointer
 
     inputManager = InputManager(); // Create Input Manager
+    uiManager = UIManager(windowDimensions, renderWindow);
 
     Loop(); // Start Loop
 }
@@ -33,12 +34,13 @@ void Sell::Loop() {
             run = false;
         }
         //(-camPos.x + (windowDimensions.x / 2)) / (1 / camSize), (-camPos.y + (windowDimensions.y / 2)) / (1 / camSize)
-        (*window).Clear(); // Clear Window
+        renderWindow->Clear(); // Clear Window
         for (Entity& entity : entities) { // Loop through entities
             Vector2 entityPos = Vector2(entity.getPos().x * (1 / camSize) + (windowDimensions.x / 2) + camPos.x, entity.getPos().y * (1 / camSize) + (windowDimensions.y / 2) + camPos.x); // Get position of entity and adjust
-            (*window).Render(entity, entityPos, camSize); // Draw current entity
+            renderWindow->RenderEntity(entity, entityPos, camSize); // Draw current entity
         }
-        (*window).Display(); // Display all rendered textures
+        uiManager.RenderElements();
+        renderWindow->Display(); // Display all rendered textures
     
         deltaTime = timer->GetTime(); // Set deltaTime
         if (deltaTime < 1 / (float)targetFPS) { // If the frame was finished before fps time specified
@@ -49,13 +51,17 @@ void Sell::Loop() {
         fps = (int)round(1 / deltaTime); // Set FPS variable
         delete timer; // Delete Timer
     }
-    (*window).CleanUp(); // Close Window
+    renderWindow->CleanUp(); // Close Window
     SDL_Quit(); // Quit SDL
     
 }
 
-Entity* Sell::InstantiateEntity(Vector2 _pos, Vector2 _scale, const char* _texturePath) {
-    Entity newEntity = Entity(_pos, _scale, window->LoadTexture(_texturePath)); // Create new Entity
+SDL_Texture* Sell::LoadTexture(const char* _filePath) {
+    return renderWindow->LoadTexture(_filePath);
+}
+
+Entity* Sell::InstantiateEntity(Vector2 _pos, Vector2 _scale, SDL_Texture* _tex) {
+    Entity newEntity = Entity(_pos, _scale, _tex); // Create new Entity
     entities.push_back(newEntity); // Add new Entity to entities list
     return &entities[entities.capacity() - 1]; // return memory position of new Entity in entities list
 }

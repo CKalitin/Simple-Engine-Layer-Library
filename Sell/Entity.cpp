@@ -1,8 +1,8 @@
 #include "Entity.hpp"
 
-Entity::Entity(Vector2 p_pos, Vector2 p_scale, SDL_Texture* p_tex) : pos(p_pos), scale(p_scale), tex(p_tex) {
+Entity::Entity(Vector2 _pos, Vector2 _scale, SDL_Texture* _tex) : pos(_pos), scale(_scale), tex(_tex) {
 	int w, h;
-	SDL_QueryTexture(p_tex, NULL, NULL, &w, &h); // Get pixel dimensions of texture
+	SDL_QueryTexture(_tex, NULL, NULL, &w, &h); // Get pixel dimensions of texture
 
 	// Set variables of currentFrame
 	currentFrame.x = 0;
@@ -11,7 +11,7 @@ Entity::Entity(Vector2 p_pos, Vector2 p_scale, SDL_Texture* p_tex) : pos(p_pos),
 	currentFrame.h = h;
 }
 
-void Entity::Move(Vector2 p_pos) {
-	pos.x = p_pos.x; // Set current X to new pos
-	pos.y = p_pos.y; // Set current Y to new pos
+void Entity::Move(Vector2 _pos) {
+	pos.x = _pos.x; // Set current X to new pos
+	pos.y = _pos.y; // Set current Y to new pos
 }
