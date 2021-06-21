@@ -1,7 +1,7 @@
 #include "RenderWindow.hpp"
 
-RenderWindow::RenderWindow(const char* _title, int _w, int _h) : window(NULL), renderer(NULL) {
-	window = SDL_CreateWindow(_title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _w, _h, SDL_WINDOW_SHOWN); // Create SDL Window
+RenderWindow::RenderWindow(const char* _title, int _w, int _h) : window(NULL), renderer(NULL), windowDimensions(_w, _h) {
+	window = SDL_CreateWindow(_title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _w, _h, SDL_WINDOW_SHOWN + SDL_WINDOW_RESIZABLE); // Create SDL Window
 	if (window == NULL) { // Check if window failed to init
 		std::cout << "Window failed to init. Error" << SDL_GetError() << std::endl; // Print error
 	}
@@ -17,9 +17,25 @@ SDL_Texture* RenderWindow::LoadTexture(const char* p_filePath) {
 	texture = IMG_LoadTexture(renderer, p_filePath); // Get texture from file path
 
 	if (texture == NULL) // If texture was not loaded send an error message
-		std::cout << "Failed to lead texture. Error: " << SDL_GetError() << std::endl;
+		std::cout << "Failed to load texture. Error: " << SDL_GetError() << std::endl;
 
-	return texture; // return newly loaded texture
+	return texture; // Return newly loaded texture
+}
+
+SDL_Texture* RenderWindow::CreateMessageTexture(TTF_Font* _font, SDL_Color _colour, const char* _message) {
+	SDL_Texture* messageTexture = NULL; // Declare texture variable
+	SDL_Surface* messageSurface = NULL; // Declare message surface variable
+
+	messageSurface = TTF_RenderText_Solid(_font, _message, _colour); // Create Text Surface
+	messageTexture = SDL_CreateTextureFromSurface(renderer, messageSurface); // Turn Text surface in SDL Texture
+
+	if (messageTexture == NULL) // If texture was not loaded send an error message
+		std::cout << "Failed to load message texture. Error: " << SDL_GetError() << std::endl;
+
+	if (messageTexture == NULL) // If texture was not loaded send an error message
+		std::cout << "Failed to load texture. Error: " << SDL_GetError() << std::endl;
+
+	return messageTexture; // Return newly loaded Texture
 }
 
 int RenderWindow::getRefreshRate() {
@@ -39,6 +55,8 @@ void RenderWindow::Clear() {
 }
 
 void RenderWindow::RenderEntity(Entity& _entity, Vector2 _pos, float _scale) {
+	SDL_GetWindowSize(window, &windowDimensions.x, &windowDimensions.y); // Set windowDimensions to current window size
+
 	SDL_Rect src; // Source, Create rect for texture
 	src.x = _entity.getCurrentFrame().x;
 	src.y = _entity.getCurrentFrame().y;
@@ -47,12 +65,13 @@ void RenderWindow::RenderEntity(Entity& _entity, Vector2 _pos, float _scale) {
 
 	SDL_Rect dst; // Destination, Create rect for texture
 	// Set texture position to entity position and adjust so it is centered, not off to the bottom right
-	dst.x = (int)_pos.x - (int)((_entity.getCurrentFrame().w / 2) * _entity.getScale().x / (1 * _scale));
-	dst.y = (int)_pos.y - (int)((_entity.getCurrentFrame().h / 2) * _entity.getScale().y / (1 * _scale));
-	dst.w = (int)(_entity.getCurrentFrame().w * _entity.getScale().x / (1 * _scale));
-	dst.h = (int)(_entity.getCurrentFrame().h * _entity.getScale().y / (1 * _scale));
+	dst.x = (int)(_pos.x * (_entity.getScale().x / (1 * _scale)));
+	dst.y = (int)(_pos.y * (_entity.getScale().y / (1 * _scale)));
+	dst.w = (int)(_entity.getCurrentFrame().w * _entity.getScale().x / (1 * _scale) * ((float)windowDimensions.x / (1000 * ((float)windowDimensions.x / (float)windowDimensions.y))));
+	dst.h = (int)(_entity.getCurrentFrame().h * _entity.getScale().y / (1 * _scale) * ((float)windowDimensions.y / 1000));
 
 	SDL_RenderCopy(renderer, _entity.getTex(), &src, &dst); // Render texture to screen
+
 }
 
 void RenderWindow::Render(SDL_Texture* _tex, SDL_Rect _rect, Vector2 _pos, Vector2 _size) {

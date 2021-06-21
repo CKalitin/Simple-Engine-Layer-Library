@@ -33,9 +33,9 @@ void InputManager::Update() {
 
 }
 
-bool InputManager::isKeyDown(SDL_Scancode p_key) {
+bool InputManager::isKeyDown(SDL_Scancode _key) {
     if (keyStates != 0) { // If there are keys down
-        if (keyStates[p_key] == 1) { // If key is pressed
+        if (keyStates[_key] == 1) { // If key is pressed
             return true;
         } else {
             return false;
@@ -45,12 +45,12 @@ bool InputManager::isKeyDown(SDL_Scancode p_key) {
     return false;
 }
 
-bool InputManager::isMouseButtonDown(int p_mouseButtonNumber) {
-    return mouseButtonStates[p_mouseButtonNumber]; // Return mouseButton bool value
+bool InputManager::isMouseButtonDown(int _mouseButtonNumber) {
+    return mouseButtonStates[_mouseButtonNumber]; // Return mouseButton bool value
 }
 
-Vector2* InputManager::getMousePosition() {
-	return &mousePos; // Return pointer to mousePos
+Vector2 InputManager::getMousePosition() {
+	return mousePos; // Return pointer to mousePos
 }
 
 bool InputManager::onQuit() {

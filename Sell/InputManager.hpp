@@ -19,10 +19,12 @@ public:
 
 	void Update(); // Run every frame to get inputs
 
-	bool isKeyDown(SDL_Scancode p_key); // Return true if specified key is pressed
-	bool isMouseButtonDown(int p_mouseButton); // Return true if specified mouseButton is pressed
-	Vector2* getMousePosition(); // Return current mouse pos
+	bool isKeyDown(SDL_Scancode _key); // Return true if specified key is pressed
+	bool isMouseButtonDown(int _mouseButton); // Return true if specified mouseButton is pressed
+	Vector2 getMousePosition(); // Return current mouse pos
 	bool onQuit(); // Return if X in top right corner is pressed
+
+	const Uint8* getKeyStates() { return keyStates; };
 private:
 	const Uint8* keyStates = 0; // List of Key States as ints
 

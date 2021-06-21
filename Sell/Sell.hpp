@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <list>
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -9,6 +10,7 @@
 #include "Entity.hpp"
 #include "InputManager.hpp"
 #include "UI.hpp"
+#include "AudioPlayer.hpp"
 #include "utils.hpp"
 
 class Sell {
@@ -19,8 +21,7 @@ public:
 
 	InputManager* GetInputManager() { return &inputManager; }; // Return Input Manager
 	UIManager* GetUIManager() { return &uiManager; }; // Return UI class
-
-	SDL_Texture* LoadTexture(const char* _filePath); // Load texture at specified file path by using renderWindow
+	RenderWindow* GetRenderWindow() { return renderWindow; }
 
 	Entity* InstantiateEntity(Vector2 _pos, Vector2 _scale, SDL_Texture* _tex); // Create new entity meathod
 	void DeleteEntity(Entity* _entity); // Delete entity meathod
@@ -34,9 +35,9 @@ public:
 	void SetCamSize(float _size) { camSize = _size; }; // Set Cam Scale
 	float GetCamSize() { return camSize; }; // Get Cam Scale
 private:
-	int fps;
+	int fps = 0;
 	int targetFPS = 30;
-	float deltaTime;
+	float deltaTime = 0;
 
 	RenderWindow* renderWindow;
 	InputManager inputManager;
@@ -47,9 +48,9 @@ private:
 
 	bool run = true;
 
-	Vector2 windowDimensions = Vector2();
+	Vector2Int windowDimensions = Vector2Int();
 
-	std::vector<Entity> entities = {};
+	std::list<Entity> entities = {};
 
 	Vector2 camPos = Vector2();
 	float camSize = 1;

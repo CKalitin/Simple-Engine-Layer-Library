@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include "Entity.hpp"
 
@@ -13,6 +14,7 @@ public:
 	RenderWindow* GetRenderWindow(); // Returns this
 
 	SDL_Texture* LoadTexture(const char* _filePath); // Load texture at specified file path
+	SDL_Texture* CreateMessageTexture(TTF_Font* _font, SDL_Color _colour, const char* _message); // Create and Return Text Texture with specified Values
 
 	int getRefreshRate(); // return refresh rate of current monitor
 
@@ -24,4 +26,6 @@ public:
 private:
 	SDL_Window* window; // Pointer to window var in SDL
 	SDL_Renderer* renderer; // Pointer to SDL Renderer
+
+	Vector2Int windowDimensions;
 };

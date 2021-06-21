@@ -13,6 +13,7 @@ public:
 	Entity(Vector2 _pos, Vector2 _scale, SDL_Texture* _tex); // Entity Constructor
 
 	void Move(Vector2 _pos); // Move Entity to pos
+	void MoveTowards(Vector2 _dest, float t); // Lerp Move Entity
 
 	Vector2& getPos() { return pos; };
 	Vector2& getScale() { return scale; };

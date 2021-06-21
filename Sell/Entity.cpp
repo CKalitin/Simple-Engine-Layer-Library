@@ -15,3 +15,8 @@ void Entity::Move(Vector2 _pos) {
 	pos.x = _pos.x; // Set current X to new pos
 	pos.y = _pos.y; // Set current Y to new pos
 }
+
+void Entity::MoveTowards(Vector2 _dest, float t) {
+	pos.x = pos.x + ((_dest.x - pos.x) * t);
+	pos.y = pos.y + ((_dest.y - pos.y) * t);
+}
