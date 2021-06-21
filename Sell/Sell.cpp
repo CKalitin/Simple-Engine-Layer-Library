@@ -39,6 +39,7 @@ void Sell::Loop() {
         //(-camPos.x + (windowDimensions.x / 2)) / (1 / camSize), (-camPos.y + (windowDimensions.y / 2)) / (1 / camSize)
         renderWindow->Clear(); // Clear Window
         for (Entity& entity : entities) { // Loop through entities
+            if (entity.getIsAnimated()) { entity.UpdateAnimation(); }
             Vector2 entityPos = Vector2((entity.getPos().x - (entity.getCurrentFrame().w / 2)) * (1 / camSize) + (windowDimensions.x / 2) + camPos.x, (entity.getPos().y - (entity.getCurrentFrame().h / 2)) * (1 / camSize) + (windowDimensions.y / 2) + camPos.x); // Get position of entity and adjust
             renderWindow->RenderEntity(entity, entityPos, camSize); // Draw current entity
         }

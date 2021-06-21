@@ -20,3 +20,38 @@ void Entity::MoveTowards(Vector2 _dest, float t) {
 	pos.x = pos.x + ((_dest.x - pos.x) * t);
 	pos.y = pos.y + ((_dest.y - pos.y) * t);
 }
+
+void Entity::SetAnimation(std::vector<SDL_Texture*> _animTextures, std::vector<float> _animDelays) {
+	animTextures = _animTextures;
+	animDelays = _animDelays;
+
+	animLength = _animDelays.back();
+	animated = true;
+
+	animTimer = new Timer();
+}
+
+void Entity::UpdateAnimation() {
+	/*animProgress = animTimer->GetTime() - (animTime * floor(animTimer->GetTime() / animTime - 0.05f));
+	std::cout << animProgress << std::endl;
+
+	for (int i = animIndex; i < animDelays.size(); i++) {
+		if (animProgress > animDelays[i]) {
+			tex = animTextures[i];
+			animIndex++;
+			animIndex = animIndex % animDelays.size();
+			return;
+		}
+	}*/
+	std::cout << animTimer->GetTime() << ", " << animDelays[animIndex] + (animLength * animIterations) << std::endl;
+	if (animTimer->GetTime() > animDelays[animIndex] + (animLength * animIterations)) {
+		animIndex++;
+		if (animIndex > animDelays.size() - 1) {
+			animIndex = 0;
+			animIterations++;
+		}
+
+		tex = animTextures[animIndex];
+
+	}
+}
