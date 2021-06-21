@@ -17,8 +17,8 @@ public:
 	void Move(Vector2 _pos); // Move Entity to pos
 	void MoveTowards(Vector2 _dest, float t); // Lerp Move Entity
 
-	void SetAnimation(std::vector<SDL_Texture*> _animTextures, std::vector<float> _animDelays);
-	void UpdateAnimation();
+	void SetAnimation(std::vector<SDL_Texture*> _animTextures, std::vector<float> _animDelays); // Set variables for animation
+	void UpdateAnimation(); // Update Texture if nessesary
 
 	Vector2& getPos() { return pos; };
 	Vector2& getScale() { return scale; };
@@ -37,7 +37,6 @@ private:
 	Timer* animTimer; // Time since animation start
 	bool animated = false; // If entity has animation
 	float animLength = 0; // Length of animation
-	float animProgress = 0;
 	int animIndex = 0; // Index of which delay and texture to use
 
 	int animIterations; // Number of times the full animation has been run

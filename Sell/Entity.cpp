@@ -17,41 +17,31 @@ void Entity::Move(Vector2 _pos) {
 }
 
 void Entity::MoveTowards(Vector2 _dest, float t) {
-	pos.x = pos.x + ((_dest.x - pos.x) * t);
-	pos.y = pos.y + ((_dest.y - pos.y) * t);
+	pos.x += (_dest.x - pos.x) * t; // Add new X pos to current pos X
+	pos.y += (_dest.y - pos.y) * t; // Add new Y pos to current pos Y
 }
 
 void Entity::SetAnimation(std::vector<SDL_Texture*> _animTextures, std::vector<float> _animDelays) {
-	animTextures = _animTextures;
-	animDelays = _animDelays;
+	if (animated == true) { delete animTimer; } // If this is setting a new animation delete the old timer
 
-	animLength = _animDelays.back();
-	animated = true;
+	animTextures = _animTextures; // Set animTextures
+	animDelays = _animDelays; // Set animDelays
 
-	animTimer = new Timer();
+	animated = true; // Set animated
+	animLength = _animDelays.back(); // Set animLength
+	animIndex = 0; // Reset animIndex
+
+	animTimer = new Timer(); // Create new Timer
 }
 
 void Entity::UpdateAnimation() {
-	/*animProgress = animTimer->GetTime() - (animTime * floor(animTimer->GetTime() / animTime - 0.05f));
-	std::cout << animProgress << std::endl;
-
-	for (int i = animIndex; i < animDelays.size(); i++) {
-		if (animProgress > animDelays[i]) {
-			tex = animTextures[i];
-			animIndex++;
-			animIndex = animIndex % animDelays.size();
-			return;
-		}
-	}*/
-	std::cout << animTimer->GetTime() << ", " << animDelays[animIndex] + (animLength * animIterations) << std::endl;
-	if (animTimer->GetTime() > animDelays[animIndex] + (animLength * animIterations)) {
-		animIndex++;
-		if (animIndex > animDelays.size() - 1) {
+	if (animTimer->GetTime() > animDelays[animIndex] + (animLength * animIterations)) { // If current time if greater than delay
+		animIndex++; // Increase animationIndex
+		if (animIndex > animDelays.size() - 1) { // If animIndex is greater than animDelays
 			animIndex = 0;
 			animIterations++;
 		}
 
-		tex = animTextures[animIndex];
-
+		tex = animTextures[animIndex]; // Set texture
 	}
 }
